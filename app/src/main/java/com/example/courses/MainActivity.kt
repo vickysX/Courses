@@ -3,13 +3,20 @@ package com.example.courses
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.courses.data.Datasource
+import com.example.courses.model.Topic
 import com.example.courses.ui.theme.CoursesTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,10 +41,61 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
+@Composable
+fun TopicItem(
+    topic : Topic,
+    modifier : Modifier = Modifier
+) {
+    Card(
+        modifier = Modifier.height(68.dp),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(4.dp)
+    ) {
+        Row() {
+            Image(
+                painter = painterResource(topic.image), 
+                contentDescription = stringResource(topic.name),
+                modifier = Modifier.size(68.dp)
+            )
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    end = 16.dp,
+                    bottom = 8.dp
+                )
+            ) {
+                Text(
+                    text = stringResource(topic.name),
+                    style = MaterialTheme.typography.body2,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    /*modifier = Modifier.fillMaxWidth()
+                        .wrapContentWidth(Alignment.Start)*/
+                    horizontalArrangement = Arrangement.Start,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_grain),
+                        contentDescription = "grain"
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = topic.numCourses.toString(),
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     CoursesTheme {
-        Greeting("Android")
+        TopicItem(topic = Datasource.topics[0])
     }
 }
